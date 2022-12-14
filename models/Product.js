@@ -1,7 +1,7 @@
-const {Schema, model} = require("mongoose");
+const { Schema, model } = require("mongoose");
 const ProductSchema = new Schema({
-    name:{
-        type: String, 
+    name: {
+        type: String,
         required: true,
         trim: true,
         unique: true
@@ -11,35 +11,40 @@ const ProductSchema = new Schema({
         required: true,
         trim: true
     },
-    price:{
-        type:Number,
+    price: {
+        type: Number,
         required: true,
         trim: true,
     },
-    shipping:{
+    shipping: {
         type: Number,
     },
-    pickUpOnly:{
+    pickUpOnly: {
         type: Boolean
     },
-    onSale:{
+    onSale: {
         type: Number
     },
-    saleEnd:{
+    saleEnd: {
         type: String,
         trim: true
     },
-    logo:{
+    image: {
         type: String,
         trim: true
     },
-    views:{
+    views: {
         type: Number,
         default: 0
     },
-    sold:{
+    sold: {
         type: Number,
         default: 0
+    },
+    storeId: {
+        type: Schema.Types.ObjectId,
+        ref: "Store",
+        required: true
     }
-}, {timestamps:true});
+}, { timestamps: true });
 module.exports = model("Product", ProductSchema);

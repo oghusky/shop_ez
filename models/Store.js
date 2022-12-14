@@ -1,21 +1,22 @@
 const { Schema, model } = require("mongoose");
 const StoreSchema = new Schema({
-    name:{
+    name: {
         type: String,
         required: true,
         trim: true,
         unique: true,
         minLength: 3
     },
-    email:{
+    email: {
         type: String,
         trim: true,
         required: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email must be valid']
     },
-    adminId:{
+    adminId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     phone: {
         type: String,
@@ -47,59 +48,59 @@ const StoreSchema = new Schema({
     youtube: {
         type: String,
     },
-    policies:{
+    policies: {
         type: String,
         trim: true
     },
-    products:[{
+    products: [{
         type: Schema.Types.ObjectId,
         ref: "Product"
     }],
-    membership:{
-        type:String,
+    membership: {
+        type: String,
         enum: ["basic", "pro", "enterprise"],
         default: "basic"
     },
-    membership_status:{
+    membership_status: {
         type: String,
-        enum: ["active","inactive"],
+        enum: ["active", "inactive"],
         default: "inactive"
     },
     reports: [{
         type: Schema.Types.ObjectId,
         ref: "Reports"
     }],
-    views:{
+    views: {
         type: Number,
         default: 0
     },
-    logo:{
+    logo: {
         type: String
     },
-    address:{
+    address: {
         type: String,
         trim: true,
     },
-    city:{
+    city: {
         type: String,
         trim: true,
     },
-    state:{
+    state: {
         type: String,
         trim: true,
     },
-    zip:{
+    zip: {
         type: String,
         trim: true,
     },
-    country:{
+    country: {
         type: String,
         trim: true
     },
-    theme:{
+    theme: {
         type: String,
         trim: true
     },
-    paymentInfo:{} // what????
-}, {timestamps: true});
+    paymentInfo: {} // what????
+}, { timestamps: true });
 module.exports = model("Store", StoreSchema);

@@ -1,4 +1,6 @@
 const User = require("../models/User"),
+    Store = require("../models/Store"),
+    Product = require("../models/Product"),
     bcrypt = require("bcryptjs"),
     { signToken } = require("../utils/auth"),
     { checkPassword } = require("../utils/checkPassword"),
@@ -88,6 +90,13 @@ exports.deleteUser = async (req, res) => {
     const { userId } = req.params;
     try {
         const user = await User.findByIdAndRemove(userId);
+        const stores = await Store.find({adminId: user._id});
+        stores.forEach( async store =>{
+            store.products.forEach(async product=>{
+                await Product.findByIdAndRemove(productId);
+            })
+        })
+        stores.deleteMany();
         if (user) return res.status(200).json({ msg: "USER DELETED" });
     } catch (err) {
         console.log(err);

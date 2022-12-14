@@ -1,4 +1,5 @@
 const Store = require("../models/Store"),
+    Product = require("../models/Product"),
     User = require("../models/User");
 exports.createStore = async (req, res) => {
     console.log("user logged in", req.user)
@@ -74,7 +75,10 @@ exports.updateStoreById = async (req, res) => {
 exports.deleteStore = async (req, res) => {
     try {
         const { storeId } = req.params
-        const store = await Store.findByIdAndRemove(storeId);
+        const store = await Store.findById(storeId);
+        store.products.forEach( async productId =>{
+            await Product.findByIdAndRemove(productId);
+        })
         return res.status(200).json({ msg: "Store deleted" })
     } catch (err) {
         console.log(err)
