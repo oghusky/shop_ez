@@ -7,16 +7,15 @@ const StoreSchema = new Schema({
         unique: true,
         minLength: 3
     },
-    userId:{
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
     email:{
         type: String,
         trim: true,
-        unique: true,
         required: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email must be valid']
+    },
+    adminId:{
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     phone: {
         type: String,
@@ -48,6 +47,10 @@ const StoreSchema = new Schema({
     youtube: {
         type: String,
     },
+    policies:{
+        type: String,
+        trim: true
+    },
     products:[{
         type: Schema.Types.ObjectId,
         ref: "Product"
@@ -56,6 +59,47 @@ const StoreSchema = new Schema({
         type:String,
         enum: ["basic", "pro", "enterprise"],
         default: "basic"
-    }
+    },
+    membership_status:{
+        type: String,
+        enum: ["active","inactive"],
+        default: "inactive"
+    },
+    reports: [{
+        type: Schema.Types.ObjectId,
+        ref: "Reports"
+    }],
+    views:{
+        type: Number,
+        default: 0
+    },
+    logo:{
+        type: String
+    },
+    address:{
+        type: String,
+        trim: true,
+    },
+    city:{
+        type: String,
+        trim: true,
+    },
+    state:{
+        type: String,
+        trim: true,
+    },
+    zip:{
+        type: String,
+        trim: true,
+    },
+    country:{
+        type: String,
+        trim: true
+    },
+    theme:{
+        type: String,
+        trim: true
+    },
+    paymentInfo:{} // what????
 }, {timestamps: true});
 module.exports = model("Store", StoreSchema);

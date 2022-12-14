@@ -1,6 +1,7 @@
 const User = require("../models/User"),
     bcrypt = require("bcryptjs"),
     { signToken } = require("../utils/auth"),
+    { checkPassword } = require("../utils/checkPassword"),
     { checkEmail } = require("../utils/checkEmail");
 exports.createUser = async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
@@ -8,6 +9,7 @@ exports.createUser = async (req, res) => {
         if (!email) return res.status(500).json({ msg: "Email required" });
         if (!checkEmail(email)) return res.status(500).json({ msg: "Email must be proper format" });
         if (!password) return res.status(500).json({ msg: "Password required" });
+        if (!checkPassword(password)) return res.status(500).json({ msg: "Password isn't valid" });
         if (!firstName || !lastName) return res.status(500).json({ msg: "First and last name required" })
         const user = await User.findOne({ email });
         if (user) {
