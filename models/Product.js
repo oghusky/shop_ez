@@ -45,6 +45,6 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Store",
         required: true
-    }
+    },
 }, { timestamps: true });
 module.exports = model("Product", ProductSchema);
