@@ -33,7 +33,8 @@ exports.getStoreById = async (req, res) => {
 exports.getStoresByName = async (req, res) => {
     try {
         const { storeName } = req.params
-        const stores = await Store.find({ name: { $regex: storeName } });
+        console.log(storeName);
+        const stores = await Store.find({ name: { $regex: storeName, $options: "i" } });
         return res.status(200).json({ msg: "Found Stores", stores })
     } catch (err) { }
 }

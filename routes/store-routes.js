@@ -1,5 +1,5 @@
 const { createStore, getStoreById, getAllStores, findStoresByUserId, updateStoreById, getStoresByName, deleteStore } = require("../controllers/store-controllers"),
-    { isAdmin, isLoggedIn, isOwner, isStoreOwner } = require("../middleware/index"),
+    { isLoggedIn, isStoreOwner } = require("../middleware/index"),
     router = require("express").Router();
 router
     .route("/")
