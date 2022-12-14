@@ -1,9 +1,10 @@
 const router = require("express").Router(),
-    { createProduct } = require("../controllers/product-controllers"),
+    { createProduct, getProductsByStoreId } = require("../controllers/product-controllers"),
     { isLoggedIn, isStoreOwner } = require("../middleware");
 
 router
     .route("/store/:storeId")
+    .get(getProductsByStoreId)
     .post(isLoggedIn, isStoreOwner, createProduct);
 
 module.exports = router;

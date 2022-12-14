@@ -20,3 +20,18 @@ exports.createProduct = async (req, res) => {
         return res.status(500).json({ msg: "Unable to create product" })
     }
 }
+
+exports.getProductsByStoreId = async (req, res) => {
+    const { storeId } = req.params;
+    try{
+        const store = await Store.findById(storeId);
+        if(!store?.name) return res.status(404).json({msg:"Store doesn't exist"});
+        if(store?.name){
+            const products = await Product.find({storeId});
+            return res.status(200).json({msg:"Found Products", products})
+        }
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({msg:"Unable to find products"})
+    }
+}
