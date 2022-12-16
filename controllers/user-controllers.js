@@ -42,11 +42,17 @@ exports.createUser = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, signUpGoogle, tokenSub, firstName, lastName } = req.body;
     try {
+        let pwdToSave;
+        if (!password && signUpGoogle) {
+            pwdToSave = `${tokenSub}$${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toLowerCase()}`;
+        } else {
+            pwdToSave = password;
+        }
         const user = await User.findOne({ email }).select("+password");
         if (user?.email) {
-            const authUser = await bcrypt.compare(password, user.password);
+            const authUser = await bcrypt.compare(pwdToSave, user.password);
             if (authUser) {
                 const token = await signToken(user);
                 return res.status(200).json({
