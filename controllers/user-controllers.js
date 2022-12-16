@@ -6,18 +6,24 @@ const User = require("../models/User"),
     { checkPassword } = require("../utils/checkPassword"),
     { checkEmail } = require("../utils/checkEmail");
 exports.createUser = async (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName, signUpGoogle, tokenSub } = req.body;
     try {
+        let pwdToSave;
+        if (!password && signUpGoogle) {
+            pwdToSave = `${tokenSub}$${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toLowerCase()}`;
+        } else {
+            pwdToSave = password;
+        }
         if (!email) return res.status(500).json({ msg: "Email required" });
         if (!checkEmail(email)) return res.status(500).json({ msg: "Email must be proper format" });
-        if (!password) return res.status(500).json({ msg: "Password required" });
-        if (!checkPassword(password)) return res.status(500).json({ msg: "Password isn't valid" });
+        if (!pwdToSave) return res.status(500).json({ msg: "Password required" });
+        if (!checkPassword(pwdToSave)) return res.status(500).json({ msg: "Password isn't valid" });
         if (!firstName || !lastName) return res.status(500).json({ msg: "First and last name required" })
         const user = await User.findOne({ email });
         if (user) {
             return res.status(500).json({ msg: "USER WITH THAT INFO EXISTS" });
         }
-        const newUser = await User.create({ email, password, firstName, lastName })
+        const newUser = await User.create({ email, password: pwdToSave, firstName, lastName })
         const token = await signToken(newUser);
         return res.status(201).json({
             token,
@@ -90,9 +96,9 @@ exports.deleteUser = async (req, res) => {
     const { userId } = req.params;
     try {
         const user = await User.findByIdAndRemove(userId);
-        const stores = await Store.find({adminId: user._id});
-        stores.forEach( async store =>{
-            store.products.forEach(async product=>{
+        const stores = await Store.find({ adminId: user._id });
+        stores.forEach(async store => {
+            store.products.forEach(async product => {
                 await Product.findByIdAndRemove(productId);
             })
         })
