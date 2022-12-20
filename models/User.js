@@ -67,6 +67,10 @@ const UserSchema = new Schema({
             type: String,
             trim: true,
         },
+        suite:{
+            type: String,
+            trim: true
+        },
         city: {
             type: String,
             trim: true,
@@ -78,6 +82,10 @@ const UserSchema = new Schema({
         zip: {
             type: Number,
             trim: true,
+        },
+        country:{
+            type: String,
+            trim: true
         }
     },
     isVerified:{

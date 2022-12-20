@@ -9,7 +9,7 @@ exports.createProduct = async (req, res) => {
         const store = await Store.findById(storeId);
         if (!store?.name) return res.status(404).json({ msg: "Store doesn't exist" });
         if (store?.name) {
-            const product = await Product.create({ name, price, description, storeId });
+            const product = await Product.create({ name, price, description, storeId, userId: req.userId });
             store.products.push(product);
             await store.save();
             return res.status(201).json({ msg: "Product created", product });

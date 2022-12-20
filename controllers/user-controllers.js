@@ -33,7 +33,7 @@ exports.createUser = async (req, res) => {
                 email: newUser.email,
                 firstName: newUser.firstName,
                 lastName: newUser.lastName,
-                userType: newUser.userType
+                userType: newUser.userType,
             },
         })
     } catch (err) {
@@ -63,6 +63,7 @@ exports.login = async (req, res) => {
                         firstName: user.firstName,
                         lastName: user.lastName,
                         userType: user.userType,
+                        isVerified: user.isVerified
                     },
                     msg: "FOUND USER",
                 });
@@ -88,10 +89,32 @@ exports.findUserById = async (req, res) => {
 exports.updateUser = async (req, res) => {
     const { userId } = req.params;
     try {
-        const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+        const data = {
+            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phone: req.body.phone,
+            address: {
+                street: req.body.street,
+                suite: req.body.suite,
+                city: req.body.city,
+                state: req.body.state,
+                zip: req.body.zip,
+                country: req.body.country
+            }
+        }
+        const user = await User.findByIdAndUpdate(userId, data, { new: true });
         if (user) {
+            const updatedUser = {
+                _id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                userType: user.userType,
+                isVerified: user.isVerified
+            }
             const token = await signToken(user);
-            return res.status(200).json({ msg: "USER UPDATED", user, token });
+            return res.status(200).json({ msg: "USER UPDATED", updatedUser, token });
         }
     } catch (err) {
         console.log(err);

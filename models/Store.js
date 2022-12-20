@@ -30,14 +30,6 @@ const StoreSchema = new Schema({
         type: String,
         trim: true
     },
-    linkedin: {
-        type: String,
-        trim: true
-    },
-    pinterest: {
-        type: String,
-        trim: true
-    },
     instagram: {
         type: String,
         trim: true
@@ -77,9 +69,13 @@ const StoreSchema = new Schema({
     logo: {
         type: String
     },
-    address: {
+    street: {
         type: String,
         trim: true,
+    },
+    suite:{
+        type: String,
+        trim: true
     },
     city: {
         type: String,
@@ -100,6 +96,10 @@ const StoreSchema = new Schema({
     theme: {
         type: String,
         trim: true
+    },
+    isVerified:{
+        type: Boolean,
+        default: false
     },
     paymentInfo: {} // what????
 }, { timestamps: true });
