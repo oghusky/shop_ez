@@ -1,6 +1,7 @@
 const Store = require("../models/Store"),
     Product = require("../models/Product"),
     User = require("../models/User"),
+    Rating = require("../models/Rating"),
     { signToken } = require("../utils/auth");
 exports.createStore = async (req, res) => {
     try {
@@ -107,6 +108,8 @@ exports.deleteStore = async (req, res) => {
         store.products.forEach(async productId => {
             await Product.findByIdAndRemove(productId);
         })
+        const ratings = await Rating.find({storeId});
+        ratings.remove();
         return res.status(200).json({ msg: "Store deleted" })
     } catch (err) {
         console.log(err)

@@ -1,4 +1,5 @@
 const Store = require("../models/Store"),
+Rating = require("../models/Rating"),
     Product = require("../models/Product");
 
 exports.createProduct = async (req, res) => {
@@ -77,6 +78,8 @@ exports.deleteProduct = async (req, res) => {
         store.products = store.products.filter(item => String(item) !== productId);
         store.save();
         await Product.findByIdAndRemove(productId);
+        const ratings = await Rating.find({productId});
+        ratings.remove();
         return res.status(200).json({ msg: "Product deleted" });
     } catch (err) {
         console.log(err);
