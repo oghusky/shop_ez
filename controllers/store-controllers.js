@@ -89,6 +89,7 @@ exports.findStoresByUserId = async (req, res) => {
     }
 }
 
+
 exports.updateStoreById = async (req, res) => {
     try {
         const { storeId } = req.params
@@ -108,7 +109,7 @@ exports.deleteStore = async (req, res) => {
         store.products.forEach(async productId => {
             await Product.findByIdAndRemove(productId);
         })
-        const ratings = await Rating.find({storeId});
+        const ratings = await Rating.find({ storeId });
         ratings.remove();
         return res.status(200).json({ msg: "Store deleted" })
     } catch (err) {

@@ -69,6 +69,9 @@ const StoreSchema = new Schema({
     logo: {
         type: String
     },
+    banner:{
+        type: String,
+    },
     street: {
         type: String,
         trim: true,

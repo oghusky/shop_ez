@@ -1,0 +1,13 @@
+to create s3 access.
+create s3 bucket
+make public 
+click dropdown next to profile name 
+click security credentials
+create user and give user s3 access needed
+after user is created you get access keys
+create ~/.aws/credentials file
+paste >>> aws_access_key_id = <YOUR_ACCESS_KEY_ID>
+          aws_secret_access_key = <YOUR_SECRET_ACCESS_KEY> <<< into file
+get credentials after user is created
+create bucket policy >>> under permissions tab
+create CORS policy >>> under permissions tab
