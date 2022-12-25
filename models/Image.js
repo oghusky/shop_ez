@@ -21,7 +21,6 @@ const { Schema, model } = require("mongoose"),
         eTag: {
             type: String,
             trim: true,
-            required: true
         }
     }, { timestamps: true });
 module.exports = model("Image", ImageSchema);

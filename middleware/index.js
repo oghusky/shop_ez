@@ -53,7 +53,6 @@ exports.isStoreOwner = async (req, res, next) => {
         const token = req.headers.authorization;
         const tokenId = decode(token).data._id;
         const stores = await Store.find({ adminId: String(tokenId) });
-        console.log("is store owner")
         if (stores.length > 0) next();
         else return res.status(403).json({ msg: "You aren't and admin" })
     } catch (err) { }

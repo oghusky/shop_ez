@@ -1,7 +1,11 @@
-const AWS = require("aws-sdk"),
-    fs = require("fs"),
-    path = require("path");
-const s3 = new AWS.S3({ region: "us-east-1" });
+const res = require("express/lib/response");
+
+const fs = require("fs"),
+    path = require("path"),
+    util = require('util'),
+    AWS = require("aws-sdk"),
+    Image = require('../models/Image'),
+    s3 = new AWS.S3({ region: "us-east-1" });
 
 var params = {
     Bucket: "shopez"
@@ -31,26 +35,31 @@ const listFoldersInBucket = async (name) => {
         const folders = await s3.listObjects(params).promise()
         const found = folders.Contents.filter(item => item.Key.includes(name));
         console.log(found);
-    } catch (err) { 
+    } catch (err) {
         console.log(err);
     }
 }
 
-const s3Upload = async (bucketName, file, alias) => {
+const s3Upload = async (bucketName, file, alias, imageType, storeId, productId) => {
     try {
+        console.log(file)
+        const fileStream = fs.createReadStream(file);
         const uploadParams = {
-            Bucket: bucketName,
+            Bucket: `shopez/${bucketName}`,
+            Body: fileStream,
             Key: "",
             ACL: "public-read",
         };
-        const fileStream = fs.createReadStream(file);
-        uploadParams.Body = fileStream;
         uploadParams.Key = alias || path.basename(file);
         result = await s3.upload(uploadParams).promise();
-        console.log(result);
-        return result;
+        if (result) await Image.create({ url: result.Location, imageType, eTag: result.Etag, storeId, productId })
+        fs.unlink(path.join(file), (err) => {
+            if (err) throw err;
+          });
+        return result
     } catch (err) {
-        console.log(err);
+        console.log("Amazon upload error: ", err);
+        return res.status(500).json({ msg: "Unable to create image" })
     }
 }
 
