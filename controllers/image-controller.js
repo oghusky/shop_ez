@@ -29,3 +29,27 @@ exports.createItemImage = async (req, res) => {
         return res.status(201).json({ msg: "Image uploaded" });
     } catch (err) { }
 }
+
+exports.getImageByProductId = async (req, res) => {
+    const { productId } = req.params;
+    try {
+        console.log(productId)
+        const image = await Image.find({ productId });
+        return res.status(200).json({ msg: "Found Image", image })
+    } catch (err) {
+        console.log(err)
+        return res.status(404).json({ msg: "Unable to find image" })
+    }
+}
+
+exports.getImagesByStoreId = async (req, res) => {
+    const { storeId } = req.params;
+    console.log(storeId);
+    try {
+        const images = await Image.find({ storeId });
+        return res.status(200).json({ msg: "Found Images", images });
+    } catch (err) {
+        console.log(err);
+        return res.status(404).json({ msg: "Unable to get images" });
+    }
+}

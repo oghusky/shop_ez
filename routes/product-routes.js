@@ -9,9 +9,13 @@ router
 
 router
     .route("/store/:storeId/item/:productId")
-    .get(getProductByItemId)
     .put(isLoggedIn, isStoreOwner, productInStore, updateProduct)
     .delete(isLoggedIn, isStoreOwner, productInStore, deleteProduct);
+
+router
+    .route("/id/:productId")
+    .get(getProductByItemId)
+
 
 router
     .route("/name/:productName")

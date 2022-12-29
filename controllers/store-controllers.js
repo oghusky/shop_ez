@@ -34,7 +34,7 @@ exports.createStore = async (req, res) => {
 exports.getStoreById = async (req, res) => {
     try {
         const { storeId } = req.params;
-        const store = await Store.findById(storeId);
+        const store = await Store.findById(storeId).populate("products");
         store.views++;
         store.save();
         return res.status(200).json({ msg: "Found store", store })
